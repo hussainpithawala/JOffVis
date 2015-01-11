@@ -49,6 +49,11 @@
 			<artifactId>swingx</artifactId>
 			<version>1.6.1</version>
 		</dependency>
+		<dependency>
+			<groupId>de.sciss</groupId>
+			<artifactId>weblaf</artifactId>
+			<version>1.27</version>
+		</dependency>
 	</dependencies>
 	<name>joffice</name>
 
