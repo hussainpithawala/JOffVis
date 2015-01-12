@@ -158,11 +158,6 @@ public class RecordTreeTableModel extends AbstractTreeTableModel {
     return value;
   }
   
-  public String getRowDescription(int selectedRow) {
-    Record record = rawRecords.get(selectedRow);
-    return record.toString();
-  }
-  
   @Override
   public Object getRoot()
   {
