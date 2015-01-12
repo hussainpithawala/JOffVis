@@ -1,6 +1,7 @@
 package joffice.gui.frame;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -38,6 +39,7 @@ import org.apache.poi.hpsf.Property;
 import org.apache.poi.hpsf.PropertySetFactory;
 import org.apache.poi.hpsf.Section;
 import org.apache.poi.hpsf.SummaryInformation;
+import org.apache.poi.hssf.OldExcelFormatException;
 import org.apache.poi.hssf.record.Record;
 import org.apache.poi.hssf.record.RecordFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -236,14 +238,25 @@ public class JOfficeFrame extends JFrame {
       List<Record> records = RecordFactory.createRecords(stream);
       updateTreeTable(records);
       fs.close();
+    } catch (OldExcelFormatException e){
+      showExceptionMessage(e);
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      JOptionPane.showMessageDialog(null, "Unable to open file");
-      e.getMessage();
-      e.printStackTrace();
+      showExceptionMessage(e);
     }
   }
 
+  private void showExceptionMessage(Exception exception) {
+    JTextArea jta = new JTextArea(exception.getMessage());
+    JScrollPane jsp = new JScrollPane(jta){
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(480, 320);
+        }
+    };
+    JOptionPane.showMessageDialog(
+        null, jsp, "Error", JOptionPane.ERROR_MESSAGE);
+  }
+  
   private class SummaryListener implements POIFSReaderListener {
     public void processPOIFSReaderEvent(POIFSReaderEvent event) {
       StringBuilder summary = new StringBuilder();
