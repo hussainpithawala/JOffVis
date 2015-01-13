@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.hssf.record.Record;
+import org.apache.poi.hssf.record.RecordFormatException;
 
 public class RecordTreeNode {
   private Record record;
@@ -31,7 +32,11 @@ public class RecordTreeNode {
   public int getSize() {
     int size = 0;
     if (children.isEmpty() && record != null) {
-      size = record.getRecordSize();
+      try {
+        size = record.getRecordSize();
+      } catch(RecordFormatException rfe) {
+        rfe.printStackTrace();
+      }
     } else {
       for (RecordTreeNode childNode : children) {
         size += childNode.getSize();

@@ -106,6 +106,8 @@ public class JOfficeFrame extends JFrame {
   public JOfficeFrame() {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setVisible(true);
+    this.setTitle("JOffVis");
+    
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 450, 300);
@@ -161,7 +163,6 @@ public class JOfficeFrame extends JFrame {
   }
 
   private void updateTreeTable(List<Record> records) {
-    setTitle("Record Table");
     TreeTableModel treeTableModel = new RecordTreeTableModel(records);
     treeTable.setTreeTableModel(treeTableModel);
   }
