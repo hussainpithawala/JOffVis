@@ -1,5 +1,6 @@
 package joffice.gui.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.hssf.record.Record;
@@ -8,7 +9,18 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 public class RecordTreeTableModel extends AbstractTreeTableModel {
   private RecordTreeNode rootNode;
   private List<Record> rawRecords;
-
+  private static List<String> treeBeginList = new ArrayList<String>();
+  private static List<String> treeEndList = new ArrayList<String>();
+  
+  {
+    treeBeginList.add("BOFRecord");
+    treeBeginList.add("BeginRecord");
+    // treeBeginList.add("ChartStartBlockRecord");
+    
+    treeEndList.add("EOFRecord");
+    treeEndList.add("EndRecord");
+    // treeEndList.add("ChartEndBlockRecord");
+  }
   public RecordTreeTableModel(List<Record> rawRecords) {
     this.rawRecords = rawRecords;
     rootNode = new RecordTreeNode();
@@ -19,7 +31,7 @@ public class RecordTreeTableModel extends AbstractTreeTableModel {
         int lastIndex = processChildTree(rootNode, childNode, index);
         index = lastIndex;
       } else {
-        rootNode.addChildren(childNode);
+        rootNode.addChild(childNode);
       }
     }
   }
@@ -34,17 +46,17 @@ public class RecordTreeTableModel extends AbstractTreeTableModel {
     RecordTreeNode containerNode = new RecordTreeNode();
     
     // Add the BOF Record to the container Node
-    containerNode.addChildren(childNode);
+    containerNode.addChild(childNode);
     
     int lastIndex = addChildrenToParent(containerNode, index + 1);
     index = lastIndex;
     
     // Add the EOF Record to the container Node
     childNode = new RecordTreeNode(rawRecords.get(index));
-    containerNode.addChildren(childNode);
+    containerNode.addChild(childNode);
     
     // Add the dummy container node to the children node
-    parentNode.addChildren(containerNode);
+    parentNode.addChild(containerNode);
     
     return lastIndex;
   }
@@ -63,15 +75,15 @@ public class RecordTreeTableModel extends AbstractTreeTableModel {
     INNER: for (int index = prevIndex; index < rawRecords.size(); ++index) {
       Record record = rawRecords.get(index);
       RecordTreeNode childNode = new RecordTreeNode(record);
-
-      if (record.getClass().getSimpleName().equals("EOFRecord")) {
+      
+      if (treeEndList.contains(record.getClass().getSimpleName())) {
         lastIndex = index;
         break INNER;
-      } else if (record.getClass().getSimpleName().equals("BOFRecord")) {
+      } else if (treeBeginList.contains(record.getClass().getSimpleName())) {
         lastIndex = processChildTree(parentNode, childNode, index);
         index = lastIndex;
       }
-      parentNode.addChildren(childNode);
+      parentNode.addChild(childNode);
     }
     return lastIndex;
   }
@@ -99,7 +111,19 @@ public class RecordTreeTableModel extends AbstractTreeTableModel {
     } else {
       switch (columnIndex) {
       case 0:
-        value = "BIFF Records [" + recordTreeNode.getCount() + "]";
+        String displayName = "BIFF";
+        RecordTreeNode parent = recordTreeNode.getParent();
+        if (parent != null) {
+          int childIndex = parent.indexOfChild(recordTreeNode);
+          RecordTreeNode sibling = parent.getChildAtIndex(--childIndex);
+          if (sibling != null) {
+            Record siblingRecord = sibling.getRecord();
+            if (siblingRecord != null) {
+              displayName = getRecordName(siblingRecord);
+            }
+          }
+        }
+        value = displayName + " Records [" + recordTreeNode.getCount() + "]";
         break;
       case 1:
         value = "Container ";

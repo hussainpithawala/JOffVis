@@ -8,6 +8,7 @@ import org.apache.poi.hssf.record.RecordFormatException;
 
 public class RecordTreeNode {
   private Record record;
+  private RecordTreeNode parent;
   private List<RecordTreeNode> children = new ArrayList<RecordTreeNode>();
   
   public RecordTreeNode() {
@@ -25,8 +26,17 @@ public class RecordTreeNode {
   public List<RecordTreeNode> getChildren() {
     return children;
   }
-  public boolean addChildren(RecordTreeNode childNode) {
+  public boolean addChild(RecordTreeNode childNode) {
+    childNode.setParent(this);
     return children.add(childNode);
+  }
+  
+  public RecordTreeNode getChildAtIndex(int index) {
+    if (index >= 0 && index < children.size()) {
+      return children.get(index);
+    } else {
+      return null;
+    }
   }
   
   public int getSize() {
@@ -45,6 +55,10 @@ public class RecordTreeNode {
     return size;
   }
   
+  public int indexOfChild(RecordTreeNode child) {
+    return children.indexOf(child);
+  }
+  
   public int getCount() {
     int count = 0;
     if (children.isEmpty() && record != null) {
@@ -55,5 +69,11 @@ public class RecordTreeNode {
       }      
     }
     return count;
+  }
+  public RecordTreeNode getParent() {
+    return parent;
+  }
+  public void setParent(RecordTreeNode parent) {
+    this.parent = parent;
   }
 }
