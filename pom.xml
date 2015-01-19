@@ -45,6 +45,11 @@
 			<version>3.10.1</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.10.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.swinglabs</groupId>
 			<artifactId>swingx</artifactId>
 			<version>1.6.1</version>
@@ -53,6 +58,11 @@
 			<groupId>de.sciss</groupId>
 			<artifactId>weblaf</artifactId>
 			<version>1.27</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
 		</dependency>
 	</dependencies>
 	<name>joffice</name>

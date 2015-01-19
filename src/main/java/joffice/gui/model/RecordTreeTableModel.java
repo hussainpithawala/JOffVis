@@ -1,6 +1,7 @@
 package joffice.gui.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.poi.hssf.record.Record;
@@ -9,18 +10,15 @@ import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 public class RecordTreeTableModel extends AbstractTreeTableModel {
   private RecordTreeNode rootNode;
   private List<Record> rawRecords;
-  private static List<String> treeBeginList = new ArrayList<String>();
-  private static List<String> treeEndList = new ArrayList<String>();
+  private static final List<String> treeBeginList = new ArrayList<String>();
+  private static final List<String> treeEndList = new ArrayList<String>();
   
+  static
   {
-    treeBeginList.add("BOFRecord");
-    treeBeginList.add("BeginRecord");
-    // treeBeginList.add("ChartStartBlockRecord");
-    
-    treeEndList.add("EOFRecord");
-    treeEndList.add("EndRecord");
-    // treeEndList.add("ChartEndBlockRecord");
+    treeBeginList.addAll(Arrays.asList("BOFRecord", "BeginRecord"));
+    treeEndList.addAll(Arrays.asList("EOFRecord", "EndRecord"));
   }
+  
   public RecordTreeTableModel(List<Record> rawRecords) {
     this.rawRecords = rawRecords;
     rootNode = new RecordTreeNode();
@@ -172,7 +170,6 @@ public class RecordTreeTableModel extends AbstractTreeTableModel {
     String value = null;
     String simpleName = record.getClass().getSimpleName();
     String baseName = simpleName.substring(0, simpleName.length() - 6);
-    
     if (baseName.equals("Unknown")) {
       String description = record.toString();
       value = description.substring(1, description.indexOf(']'));

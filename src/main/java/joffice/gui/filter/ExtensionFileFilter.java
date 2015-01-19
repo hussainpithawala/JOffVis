@@ -10,7 +10,7 @@ public class ExtensionFileFilter extends FileFilter {
    * Adds an extnesion that this file filter recognizes.
    * 
    * @param extension
-   *          a file extension (such as ".txt" or "txt")
+   * a file extension (such as ".xls" or ".doc")
    */
   public void addExtension(String extension) {
     if (!extension.startsWith("."))
